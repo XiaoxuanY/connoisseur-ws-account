@@ -12,7 +12,9 @@ import com.connoisseur.services.repository.UserRepository;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +61,19 @@ public class UserManager {
         return user;
     }
 
+    @Transactional(readOnly = true)
+
+    public Page<CnsUser> searchUser(String query, int page, int limit) {
+
+//        Page<CnsUser> result = userRepository.findAll();
+        return null;
+
+    }
+
+//    private Pageable createPageRequest() {
+//        //Create a new Pageable object here.
+//    }
+
     public CnsUser createUser(CnsUser user) {
         final CnsUser existUser = userRepository.findByEmail(user.getEmail());
         if (existUser == null) {
@@ -104,6 +119,7 @@ public class UserManager {
                 return token;
 
             } else {
+                log.info(String.format("Reject login attempt for user %s [%s]", username, clientSpec));
                 throw new RuntimeException("Wrong Password!");
             }
         }

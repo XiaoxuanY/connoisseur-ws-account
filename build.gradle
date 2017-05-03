@@ -39,6 +39,8 @@ sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+    jcenter()
+
 }
 dependencyManagement {
     imports {
@@ -57,10 +59,13 @@ dependencies {
     //compile("org.springframework.security.oauth:spring-security-oauth2")
     compile('org.springframework.data:spring-data-releasetrain:Ingalls-SR1')
     compile('org.springframework.boot:spring-boot-starter-data-rest')
+    compile('org.springframework.boot:spring-boot-starter-data-rest')
     compile('com.amazonaws:aws-java-sdk-dynamodb:1.11.119')
     compile('com.github.derjust:spring-data-dynamodb:4.5.0')
     compile('io.springfox:springfox-swagger2:2.6.1')
     compile('io.springfox:springfox-swagger-ui:2.0.1')
+    compile "io.springfox:springfox-data-rest:2.6.1"
+
     compile('org.postgresql:postgresql:9.4-1206-jdbc42')
     compile('org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final')
     compile('org.projectlombok:lombok:1.16.16')
@@ -74,7 +79,7 @@ dependencies {
     compile 'com.amazonaws:aws-java-sdk-cognitoidp:1.10.77'
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

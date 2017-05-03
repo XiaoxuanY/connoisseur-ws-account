@@ -1,14 +1,12 @@
 package com.connoisseur.services.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.sql.Date;
 
 /**
@@ -72,6 +70,9 @@ public class CnsUser {
     @Setter
     private String password;
 
+    @Getter
+    private String userType;
+
     public CnsUser(String userName, String hashedPassword, String email, String firstName, String lastName,UserStatus status) {
         this.userName = userName;
         this.password= hashedPassword;
@@ -79,6 +80,7 @@ public class CnsUser {
         this.firstName = firstName;
         this.lastName = lastName;
         this.status=status;
+        this.userType = "N";
 
     }
     CnsUser() { // jpa only

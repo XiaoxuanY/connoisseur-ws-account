@@ -59,6 +59,24 @@ public class UserRestController {
 
     }
 
+//
+//    /**
+//     * GET /v1/user/   get user list
+//     *
+//     * @return
+//     */
+//    @RequestMapping(value = "/user/",params={"limit","page","query"},method = RequestMethod.GET)
+//    public @ResponseBody
+//    List<CnsUser> getUser(@RequestParam("limit") int limit, @RequestParam("page") int page, @RequestParam("query") String query) {
+//
+//
+//        final Page<CnsUser> result = userManager.searchUser(query,page,limit);
+//
+//        return result.getContent();
+//
+//
+//    }
+
     /**
      * POST /v1/user/  create new user
      *
