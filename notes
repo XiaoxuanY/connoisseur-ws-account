@@ -1,0 +1,41 @@
+-/users/{username}/loginsession
+
+account service:
+/version
+GET /v1/users/  list
+POST /v1/user/#id
+POST /v1/user/#email
+POST /v1/user/#name   update, missing #id means create
+
+GET /v1/user/#id
+GET /v1/user/#email
+GET /v1/user/#name   get user information
+
+
+POST /v1/user/#name/loginsession auth
+GET /v1/user/#name/loginsession get auth session info
+
+
+common:
+pagination, prev link, next link
+limit
+
+
+Requests that return a list of resources may support paging. Pagination is based on cursor and not on page number. The cursor is opaque to the client and specified in either the ?before or ?after query parameter. For some resources, you can also set a custom page size with the ?limit parameter
+
+
+
+
+Link Relation Type	Description
+self	Specifies the URL of the current page of results
+next	Specifies the URL of the immediate next page of results.
+prev	Specifies the URL of the immediate previous page of results.
+curl -v -X POST \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: SSWS ${api_token}" \
+-d 
+
+
+.
+
