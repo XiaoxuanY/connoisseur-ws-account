@@ -1,0 +1,2 @@
+insert into cns_user(email,first_name,last_name,password,status,user_name,user_type,age,create_date,modify_date) values ('rayxiaonet@gmail.com','ray1','xiao1','0cc4233595ff31b0a7a443739f53d017738cebcca5114058d909f1eb8ad7be57',0,'rayxiaonet@gmail.com','A',100,0,0);
+insert into auth_token(expiration,token,ttl,user_id) values(2493867392545,'0f1a61c8-ccea-491e-a57c-cb76cc898a10',360000,1)

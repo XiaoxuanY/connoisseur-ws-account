@@ -69,9 +69,12 @@ dependencies {
     compile('org.postgresql:postgresql:9.4-1206-jdbc42')
     compile('org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final')
     compile('org.projectlombok:lombok:1.16.16')
+    compile group: 'org.hsqldb', name: 'hsqldb', version: '2.0.0'
+
 
     compile('org.apache.commons:commons-lang3:3.0')
     compile('com.google.code.gson:gson:2.8.0')
+    compile group: 'com.h2database', name: 'h2', version: '1.0.60'
 
     //compile 'com.amazonaws:aws-java-sdk:1.11.119'
     compile 'com.amazonaws:aws-java-sdk-cognitoidentity:1.10.77'

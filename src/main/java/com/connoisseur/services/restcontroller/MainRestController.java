@@ -16,6 +16,6 @@ public class MainRestController {
     @ResponseBody
     String home() {
 
-        return "Hello World!";
+        return "Welcome to Connoisseur Account Service";
     }
 }
