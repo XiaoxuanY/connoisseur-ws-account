@@ -1,0 +1,8 @@
+version: 0.1
+phases:
+  build:
+    commands:
+      - mvn package
+artifacts:
+  files:
+    - target/ws-account-1.0-SNAPSHOT.jar

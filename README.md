@@ -5,7 +5,7 @@
 ## To start locally:
 
 #### Steps:
-1. Install [Gradle](https://gradle.org)
+1. Install [Maven](https://maven.apache.org)
 
 2. Install Postgresql,create a database user and an empty database
 
@@ -27,25 +27,22 @@
 
 
 5. To start the application on 8080 port, go to project folder, and type
-    >  ./gradlew bootRun
-
-    For more options, run 
-    >  ./gradlew tasks
+    >  mvn package spring-boot:run
 
     will list all options.frequent used options includes:
     
     - Static Analyze
       Run following command to perform code static analyze with FindBugs
-      >./gradlew check
+      >mvn site
 
     - Unit test
 
       Run following command to execute all Junit test cases 
-      >./gradlew test
+      >mvn test
 
     - Build the application jar file
  
-      >./gradlew build
+      >mvn package
 
     
 
@@ -80,11 +77,11 @@ And the steps will be:
 ## To start with QA Database in AWS
 
 * Run command
-    >SPRING_PROFILES_ACTIVE=qa ./gradlew bootRun
+    >SPRING_APPLICATION_JSON='{"spring.profiles.active":"qa","spring.datasource.username":"xxxxx", "spring.datasource.password":"xxxxx"}' mvn package spring-boot:run
 
     or
 
-    > java -Dspring.application.json='{"spring.profiles.active":"qa"}' -jar connoisseur-account-service-0.0.1-SNAPSHOT.jar
+    > java -Dspring.application.json='{"spring.profiles.active":"qa","spring.datasource.username":"xxxx", "spring.datasource.password":"xxx"}' -jar connoisseur-account-service-0.0.1-SNAPSHOT.jar
 
     by specify environment variable, the application-qa.properties will picked up. This file contains the database configuration to the QA database in AWS RDS. more information can be found from [Spring Boot Externalized Configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html)
 

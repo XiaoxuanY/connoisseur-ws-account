@@ -1,8 +1,5 @@
 package com.connoisseur.services;
 
-import com.amazonaws.util.DateUtils;
-import com.amazonaws.util.HttpUtils;
-import com.connoisseur.services.config.AppConfig;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
@@ -83,33 +80,6 @@ public class AccountUtils {
         }
 
 
-        /**
-         * Checks to see if the request has valid timestamp. If given timestamp
-         * falls in 30 mins window from current server timestamp
-         */
-        public  boolean isTimestampValid(String timestamp) {
-            long timestampLong = 0L;
-
-            if (null == timestamp) {
-                return false;
-            }
-
-            timestampLong = DateUtils.parseISO8601Date(timestamp).getTime();
-
-            Long now = new Date().getTime();
-
-            long before15Mins = new Date(now - window).getTime();
-            long after15Mins = new Date(now + window).getTime();
-
-            return (timestampLong >= before15Mins && timestampLong <= after15Mins);
-        }
-
-        public  String generateRandomString() {
-            byte[] randomBytes = new byte[16];
-            RANDOM.nextBytes(randomBytes);
-            String randomString = new String(Hex.encodeHex(randomBytes));
-            return randomString;
-        }
 
         public  boolean isValidUsername(String username) {
             int length = username.length();
