@@ -1,17 +1,21 @@
+#Connoisseur WebService Backend - Account
+ 
+ 
 
 ## To start locally:
 
 #### Steps:
-1. Install postgresql,create a user and an empty database
+1. Install [Gradle](https://gradle.org)
 
+2. Install Postgresql,create a database user and an empty database
 
-2. Update **src/resources/application.properties** file accordingly
+3. Update **src/resources/application.properties** file accordingly
    > spring.datasource.url= jdbc:postgresql://localhost:5432/connoisseurdb
  spring.datasource.username=connoisseurdev
  spring.datasource.password=connoisseurdev
  
  
-3. Update **src/resources/application.properties** from
+4. Update **src/resources/application.properties** from
     >spring.jpa.hibernate.ddl-auto=update
 
     to
@@ -19,13 +23,13 @@
     >spring.jpa.hibernate.ddl-auto=create
 
     this step will help you create the tables and import the initial data.
-    After the tables created, please revert this change back.
+    **After the tables created, please revert this change back.**, 
 
 
-4. In project folder, type
+5. To start the application on 8080 port, go to project folder, and type
     >  ./gradlew bootRun
 
-    to build and run. For more options, run 
+    For more options, run 
     >  ./gradlew tasks
 
     will list all options.frequent used options includes:
@@ -50,12 +54,13 @@
 
 + By default, use localhost:8080 to access. The backend service will start with /ws-account/api/ path
 
-+ Access the swagger-ui.html for all potential api endpoints 
-http://localhost:8080/ws-account/api/swagger-ui.html
++ Access the swagger-ui.html to discover all potential api endpoints:
+
+    [http://localhost:8080/ws-account/api/swagger-ui.html](http://localhost:8080/ws-account/api/swagger-ui.html)
 
 + Install [Postman](https://www.getpostman.com) for api debug, or you can use cURL command
 
-and the steps will be:
+And the steps will be:
 
 1. Get authentication token
     - Authentication with cURL:
@@ -63,7 +68,7 @@ and the steps will be:
     - Authentication with Postman:
     
     the result should looks like 
-      > {"id":3,"userId":0,"token":"35c2deca-2ba9-4067-9314-8e093a78400a","expiration":1494323792523,"ttl":3600000,"clientSpec":""}
+      > {"id":3,"userId":0,"token": "35c2deca-2ba9-4067-9314-8e093a78400a","expiration":1494323792523,"ttl":3600000,"clientSpec":""}
     
 2. Extract the token field, add to **"X-Auth-Token"** header for all following requests.
     - Sample user list request with cURL:
@@ -75,13 +80,17 @@ and the steps will be:
 ## To start with QA Database in AWS
 
 * Run command
->SPRING_PROFILES_ACTIVE=qa ./gradlew bootRun
+    >SPRING_PROFILES_ACTIVE=qa ./gradlew bootRun
 
-by specify environment variable "SPRING_PROFILES_ACTIVE=qa", the application-qa.properties will picked up. This file contains the database configuration to the QA database in AWS RDS.
+    or
+
+    > java -Dspring.application.json='{"spring.profiles.active":"qa"}' -jar connoisseur-account-service-0.0.1-SNAPSHOT.jar
+
+    by specify environment variable, the application-qa.properties will picked up. This file contains the database configuration to the QA database in AWS RDS. more information can be found from [Spring Boot Externalized Configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html)
 
 
 
-## Configuration in Intellij IDEA:
+## Intellij IDEAConfiguration:
 
 * Ticking the **"Enable annotation processing"** checkbox in **Settings->Compiler->Annotation Processors**.
 
