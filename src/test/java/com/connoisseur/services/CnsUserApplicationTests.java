@@ -100,7 +100,7 @@ public class CnsUserApplicationTests {
 				.andExpect(status().isOk())
 				.andReturn();
 		JsonElement root2 = new JsonParser().parse(result2.getResponse().getContentAsString());
-		JsonObject pageObject2 = root2.getAsJsonObject().get("page").getAsJsonObject();
+//		JsonObject pageObject2 = root2.getAsJsonObject().get("page").getAsJsonObject();
 		JsonArray users2 = root2.getAsJsonObject().get("_embedded").getAsJsonObject().get("user").getAsJsonArray();
 		assertEquals(2, users2.size());
 

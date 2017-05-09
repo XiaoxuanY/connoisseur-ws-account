@@ -22,8 +22,9 @@ public class AuthToken {
     }
 
     @Id
-    @GeneratedValue
     @Getter
+    @GeneratedValue
+
     private long id;
 
     @Getter
