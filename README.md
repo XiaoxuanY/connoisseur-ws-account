@@ -28,7 +28,23 @@
     to build and run. For more options, run 
     >  ./gradlew tasks
 
-    will list all options
+    will list all options.frequent used options includes:
+    
+    - Static Analyze
+      Run following command to perform code static analyze with FindBugs
+      >./gradlew check
+
+    - Unit test
+
+      Run following command to execute all Junit test cases 
+      >./gradlew test
+
+    - Build the application jar file
+ 
+      >./gradlew build
+
+    
+
 
 #### API endpoints
 
@@ -73,16 +89,4 @@ by specify environment variable "SPRING_PROFILES_ACTIVE=qa", the application-qa.
 
 
 
-
-#### Static Analyze
-Run following command to perform code static analyze with FindBugs
->./gradlew check
-
-#### Unit test
-
-Run following command to execute all Junit test cases 
->./gradlew test
-
-
-#### Code Coverage
 
