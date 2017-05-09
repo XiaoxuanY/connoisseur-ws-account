@@ -31,8 +31,8 @@ public class AuthenticationFilter extends GenericFilterBean {
     final private List<String> protectedUrls = new ArrayList<String>();
 
     {
-//        protectedUrls.add("/user");
-//        protectedUrls.add("/authTokens");
+        protectedUrls.add("/user");
+        protectedUrls.add("/authTokens");
 
     }
 

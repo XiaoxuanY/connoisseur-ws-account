@@ -62,9 +62,17 @@ public class CnsUser {
     @Getter
     @Setter
     private int age;
-    @Getter
-    @Setter
+
     private Date birthday;
+
+    public Date getBirthday() {
+        return birthday == null ? null : new Date(birthday.getTime());
+    }
+
+    public void setBirthday(Date bday) {
+
+        this.birthday = bday != null ? new Date(bday.getTime()) : null;
+    }
 
     @Getter
     @Setter

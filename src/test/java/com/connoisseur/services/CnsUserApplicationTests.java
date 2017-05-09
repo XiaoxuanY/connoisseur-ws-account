@@ -1,6 +1,8 @@
 package com.connoisseur.services;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,13 +45,13 @@ public class CnsUserApplicationTests {
 	}
 
 	@Test
-	public void t0Home() throws Exception {
+	public void home() throws Exception {
 		this.mvc.perform(get("/")).andExpect(status().isOk())
 				.andExpect(content().string(containsString("Welcome to Connoisseur Account Service")));
 	}
 
 	@Test
-	public void t0authAdmin() throws Exception {
+	public void authAdmin() throws Exception {
 
 		MvcResult result = this.mvc.perform(
 				post("/user/loginsession").contentType(MediaType.APPLICATION_JSON).content("{\"email\":\"rayxiaonet@gmail.com\",\"password\":\"password1\"}"))
@@ -63,7 +66,7 @@ public class CnsUserApplicationTests {
 	}
 
 	@Test
-	public void t2findAdminUser() throws Exception {
+	public void findAdminUser() throws Exception {
 
 		this.mvc.perform(
 				get("/user/1").header(HEADER_X_AUTH_TOKEN, ADMIN_AUTH_TOKEN))
@@ -74,22 +77,35 @@ public class CnsUserApplicationTests {
 	}
 
 	@Test
-	public void t2allusers() throws Exception {
+	public void listAllusers() throws Exception {
 
-		this.mvc.perform(
+		MvcResult result = this.mvc.perform(
 				get("/user").header(HEADER_X_AUTH_TOKEN, ADMIN_AUTH_TOKEN))
 				.andDo(MockMvcResultHandlers.print())
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
+				.andReturn();
+		JsonElement root = new JsonParser().parse(result.getResponse().getContentAsString());
+		JsonObject pageObject = root.getAsJsonObject().get("page").getAsJsonObject();
+		JsonObject linksObject = root.getAsJsonObject().get("_links").getAsJsonObject();
+		JsonArray users = root.getAsJsonObject().get("_embedded").getAsJsonObject().get("user").getAsJsonArray();
+		assertEquals(22, pageObject.get("totalElements").getAsBigInteger().intValue());
+		assertEquals(20, users.size());
+		String nextLink = linksObject.get("next").getAsJsonObject().get("href").getAsString();
+		System.out.println("next link:" + nextLink);
+
+		//fetch next page
+		MvcResult result2 = this.mvc.perform(
+				get(nextLink).header(HEADER_X_AUTH_TOKEN, ADMIN_AUTH_TOKEN))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(status().isOk())
+				.andReturn();
+		JsonElement root2 = new JsonParser().parse(result2.getResponse().getContentAsString());
+		JsonObject pageObject2 = root2.getAsJsonObject().get("page").getAsJsonObject();
+		JsonArray users2 = root2.getAsJsonObject().get("_embedded").getAsJsonObject().get("user").getAsJsonArray();
+		assertEquals(2, users2.size());
+
+
 	}
 
-//
-//	@Test
-//	public void findByContaining() throws Exception {
-//
-//		this.mvc.perform(
-//				get("/api/cities/search/findByNameContainingAndCountryContainingAllIgnoringCase?name=&country=UK"))
-//				.andExpect(status().isOk())
-//				.andExpect(jsonPath("_embedded.cities", hasSize(3)));
-//	}
 
 }

@@ -25,7 +25,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'idea'
 apply plugin: "jacoco"
 apply plugin: "io.spring.dependency-management"
-
+apply plugin: 'findbugs'
 
 version = '0.0.1-SNAPSHOT'
 
@@ -49,7 +49,13 @@ dependencyManagement {
 
     }
 }
-
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+        html.stylesheet resources.text.fromFile('findbugs.xsl')
+    }
+}
 dependencies {
 
     compile('org.springframework.boot:spring-boot-starter')

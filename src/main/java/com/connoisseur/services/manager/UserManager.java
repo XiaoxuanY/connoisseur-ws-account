@@ -16,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -110,7 +108,6 @@ public class UserManager {
             throw new RuntimeException(String.format("Failed to Authenticate user %s", username));
         } else {
             final String hashPassword = accountUtils.getSaltedPassword(existUser.getEmail(), password);
-            final Map<String, String> result = new HashMap<String, String>();
             log.info("found user with password" + existUser.getPassword() + ", compare with " + hashPassword);
             if (hashPassword.equals(existUser.getPassword())) {
                 //authentication success
