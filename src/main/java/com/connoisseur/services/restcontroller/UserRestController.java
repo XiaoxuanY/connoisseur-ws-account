@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-//@RequestMapping("/user")
-
 public class UserRestController {
     private static Gson gson = new Gson();
 
@@ -29,8 +27,6 @@ public class UserRestController {
         @Getter
         @Setter
         private String password;
-
-
     }
 
 
@@ -39,10 +35,6 @@ public class UserRestController {
 
     /**
      * GET /v1/user/#id
-     * GET /v1/user/#name   get user information
-     *
-     * @param userId
-     * @return
      */
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public @ResponseBody
@@ -78,24 +70,18 @@ public class UserRestController {
 
     /**
      * POST /v1/user/  create new user
-     *
-     * @param
-     * @return
+     * No X-Auth-Token Needed
      */
-    @RequestMapping(value = "/user/", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<CnsUser> createUser(@RequestBody CnsUser user) {
-
-        return new ResponseEntity<CnsUser>(userManager.createUser(user), HttpStatus.OK);
-
+        return new ResponseEntity<>(userManager.createUser(user), HttpStatus.OK);
     }
 
     /**
      * POST /v1/user/loginsession auth
      * No X-Auth-Token Needed
-     * @param
-     * @return
      */
-    @RequestMapping(value = "/user/loginsession", method = RequestMethod.POST)
+    @RequestMapping(value = "/loginsession", method = RequestMethod.POST)
     public ResponseEntity<String> authSession(@RequestBody LoginInfo loginInfo) {
         AuthToken token = userManager.auth(loginInfo.email, loginInfo.password);
         final String resultString = gson.toJson(token);
@@ -105,14 +91,11 @@ public class UserRestController {
 
     /**
      * GET /v1/user/loginsession/{token} auth
-     * No X-Auth-Token Needed
-     * @param
-     * @return
      */
-    @RequestMapping(value = "/user/loginsession/{token}", method = RequestMethod.GET)
+    @RequestMapping(value = "/loginsession/{token}", method = RequestMethod.GET)
     public ResponseEntity<CnsUser> authSession(@PathVariable("token")String token) {
         CnsUser user = userManager.validateToken(token);
-
+        user.setPassword("");
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 

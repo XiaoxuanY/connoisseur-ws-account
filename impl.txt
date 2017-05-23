@@ -1,10 +1,40 @@
-1. "/user"
+1. "/register"
 user registration
 - need to register user without auth-token being needed
 - don't need to provide user id
+
+curl -X POST http://localhost:<port>/ws-account/api/register \
+-d '{"email":"<email>", 
+"firstName":"<first_name>",
+"lastName":"<last_name>",
+"userName":"<user_name>",
+"password":"<password>" }' \
+-H "content-type:application/json"
+
+
+
 2. "/user/loginsession"
-user loginsession
-3. "/user/:user_id"
+Creating authentication token based on email and password **
+
+curl -X POST http://localhost:8080/ws-account/api/loginsession \
+-d '{"email":"<email>","password":"<password>"}' \
+-H "content-type:application/json"
+
+
+
+3. "/user/loginsession/:token"
+** Getting user info based on token **
+
+curl -X GET http://localhost:8080/ws-account/api/loginsession/<Auth-Token> \
+-H "X-Auth-Token:<Auth-Token>"
+
+
+
+4. "/user/:user_id"
 user information based on user id
 - should not let user with valid token to access other users'
   information based on user id
+
+curl -X GET http://localhost:8080/ws-account/api/user/<user-id> \
+-H "content-type:application/json" \
+-H "X-Auth-Token:<Auth-Token>"

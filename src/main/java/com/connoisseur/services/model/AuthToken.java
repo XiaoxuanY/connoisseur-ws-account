@@ -47,6 +47,7 @@ public class AuthToken {
         return this.expiration < System.currentTimeMillis();
     }
 
+    // if token is not expired, renew token
     public boolean touch() {
         if (isExpired()) {
             return false;

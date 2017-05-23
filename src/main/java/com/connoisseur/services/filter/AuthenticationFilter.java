@@ -32,8 +32,8 @@ public class AuthenticationFilter extends GenericFilterBean {
 
     {
         protectedUrls.add("/user");
-        protectedUrls.add("/authTokens");
-
+        protectedUrls.add("/loginsession");
+        protectedUrls.add("/register");
     }
 
     @Override
@@ -45,7 +45,14 @@ public class AuthenticationFilter extends GenericFilterBean {
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 
-        if (resourcePath.startsWith("/user/loginsession")) {
+        // user who did not register doesn't have token yet
+        if (resourcePath.equals("/register")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // user who did not login doesn't have token yet
+        if (resourcePath.equals("/loginsession")) {
             chain.doFilter(request, response);
             return;
         }

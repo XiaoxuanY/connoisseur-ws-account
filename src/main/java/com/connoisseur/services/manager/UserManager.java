@@ -85,19 +85,22 @@ public class UserManager {
 
     public CnsUser validateToken(String token) {
         AuthToken authToken = authTokenRepository.findByToken(token);
+        // token does not exist
         if (authToken == null) {
             throw new CnsException(CnsErrorCode.AUTH_TOKEN_INVALID, "token is" + token, "");
         }
+        // when token expired, remove token
         if (authToken.isExpired()) {
             authTokenRepository.delete(authToken.getId());
             throw new CnsException(CnsErrorCode.AUTH_TOKEN_EXPIRED,
                     "for user id " + authToken.getId() + ", token:" + token, "");
         }
-        authToken.touch();
-        authTokenRepository.save(authToken);
-        CnsUser user = userRepository.findOne(authToken.getUserId());
-        return user;
 
+        // renew token's expiration
+        authToken.touch();
+        // save renewed token
+        authTokenRepository.save(authToken);
+        return userRepository.findOne(authToken.getUserId());
     }
 
     public AuthToken auth(String username, String password) {
