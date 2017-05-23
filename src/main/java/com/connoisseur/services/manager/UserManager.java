@@ -100,7 +100,7 @@ public class UserManager {
 
     }
 
-    public AuthToken auth(String username, String password, String clientSpec) {
+    public AuthToken auth(String username, String password) {
         log.debug(String.format("start authentication for user %s", username));
         final CnsUser existUser = findUserByAnyInternal(username);
 
@@ -111,12 +111,12 @@ public class UserManager {
             log.info("found user with password" + existUser.getPassword() + ", compare with " + hashPassword);
             if (hashPassword.equals(existUser.getPassword())) {
                 //authentication success
-                AuthToken token = new AuthToken(existUser.getId(),UUID.randomUUID().toString(), clientSpec);
+                AuthToken token = new AuthToken(existUser.getId(),UUID.randomUUID().toString());
                 token = authTokenRepository.save(token);
                 return token;
 
             } else {
-                log.info(String.format("Reject login attempt for user %s [%s]", username, clientSpec));
+                log.info(String.format("Reject login attempt for user %s [%s]", username));
                 throw new RuntimeException("Wrong Password!");
             }
         }

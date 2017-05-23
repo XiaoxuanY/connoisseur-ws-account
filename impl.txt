@@ -1,0 +1,10 @@
+1. "/user"
+user registration
+- need to register user without auth-token being needed
+- don't need to provide user id
+2. "/user/loginsession"
+user loginsession
+3. "/user/:user_id"
+user information based on user id
+- should not let user with valid token to access other users'
+  information based on user id

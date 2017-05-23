@@ -9,6 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource(exported = false)
 public interface AuthTokenRepository extends CrudRepository<AuthToken, Long> {
+
     AuthToken findByToken(String token);
 
 }

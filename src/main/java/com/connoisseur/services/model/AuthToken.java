@@ -24,7 +24,6 @@ public class AuthToken {
     @Id
     @Getter
     @GeneratedValue
-
     private long id;
 
     @Getter
@@ -42,12 +41,7 @@ public class AuthToken {
     @Getter
     @Setter
     @Column(columnDefinition = "int default 3600000")
-
     private int ttl = DEFAULT_TTL;
-
-    @Getter
-    @Setter
-    private String clientSpec;
 
     public boolean isExpired() {
         return this.expiration < System.currentTimeMillis();
@@ -62,16 +56,15 @@ public class AuthToken {
         }
     }
 
-    public AuthToken(long userId, String token, int ttl, String clientSpec) {
+    public AuthToken(long userId, String token, int ttl) {
         this.userId = userId;
         this.expiration = System.currentTimeMillis() + ttl;
-        this.clientSpec = clientSpec;
         this.token = token;
         this.ttl = ttl;
     }
 
-    public AuthToken(long userId, String token, String clientSpec) {
-        this(userId, token, DEFAULT_TTL, clientSpec);
+    public AuthToken(long userId, String token) {
+        this(userId, token, DEFAULT_TTL);
     }
 
     AuthToken() {

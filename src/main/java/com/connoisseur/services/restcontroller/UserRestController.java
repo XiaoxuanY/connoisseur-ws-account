@@ -56,7 +56,6 @@ public class UserRestController {
         }
         return user;
 
-
     }
 
 //
@@ -92,13 +91,13 @@ public class UserRestController {
 
     /**
      * POST /v1/user/loginsession auth
-     *
+     * No X-Auth-Token Needed
      * @param
      * @return
      */
     @RequestMapping(value = "/user/loginsession", method = RequestMethod.POST)
     public ResponseEntity<String> authSession(@RequestBody LoginInfo loginInfo) {
-        AuthToken token = userManager.auth(loginInfo.email, loginInfo.password,"");
+        AuthToken token = userManager.auth(loginInfo.email, loginInfo.password);
         final String resultString = gson.toJson(token);
         return new ResponseEntity<>(resultString,HttpStatus.OK);
     }
@@ -106,7 +105,7 @@ public class UserRestController {
 
     /**
      * GET /v1/user/loginsession/{token} auth
-     *
+     * No X-Auth-Token Needed
      * @param
      * @return
      */
