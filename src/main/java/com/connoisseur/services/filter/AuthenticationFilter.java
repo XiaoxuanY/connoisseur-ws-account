@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 //
 ///**
 // * Created by Ray Xiao on 4/21/17.
@@ -26,14 +27,18 @@ public class AuthenticationFilter extends GenericFilterBean {
     private final static Logger logger = Logger.getLogger(AuthenticationFilter.class);
     public static final String TOKEN_SESSION_KEY = "token";
     public static final String USER_SESSION_KEY = "user";
+
     @Autowired
     private UserManager userManager;
-    final private List<String> protectedUrls = new ArrayList<String>();
+    final private List<String> protectedUrls = new ArrayList<>();
 
     {
-        protectedUrls.add("/user");
-        protectedUrls.add("/loginsession");
         protectedUrls.add("/register");
+        protectedUrls.add("/loginsession");
+        protectedUrls.add("/user");
+        protectedUrls.add("/rating");
+        protectedUrls.add("/bookmark");
+        protectedUrls.add("/comment");
     }
 
     @Override
@@ -57,15 +62,33 @@ public class AuthenticationFilter extends GenericFilterBean {
             return;
         }
 
+
         if (protectedUrls.stream().anyMatch(url -> resourcePath.startsWith(url))) {
+
             logger.debug("access " + resourcePath + " is protected, validate user session");
+
             try {
                 if (token != null) {
                     CnsUser user = userManager.validateToken(token);
-                    if (user != null) {
+
+                    if (user != null && resourcePath.startsWith("/loginsession")) {
                         logger.debug("Token validated " + user.getUserName());
                         chain.doFilter(request, response);
                         return;
+                    }
+                    else if (user != null) {
+                        // extract id from request parameter
+                        long paramUserId = Long.parseLong(request.getParameter("id"));
+
+                        // either token's user id and user id parameter are equal or it is admin's token
+                        if (paramUserId == user.getId() || user.getId() == 0) {
+                            logger.debug("Token validated " + user.getUserName());
+                            chain.doFilter(request, response);
+                            return;
+                        } else {
+                            logger.info("Unauthorized token!!!! " + token);
+                            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not authorized to access");
+                        }
                     } else {
                         logger.info("Token invalid!!!! " + token);
                         httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalid or expired");
@@ -89,8 +112,10 @@ public class AuthenticationFilter extends GenericFilterBean {
         return (HttpServletRequest) request;
     }
 
+
     private HttpServletResponse asHttp(ServletResponse response) {
         return (HttpServletResponse) response;
     }
+
 
 }

@@ -83,12 +83,30 @@ public class UserManager {
         }
     }
 
+    public void updateUser(CnsUser existUser, CnsUser updateUser) {
+        // if user does not exist, throw exception
+        if (existUser == null) {
+            throw new InternalErrorException("CnsUser with id " + updateUser.getId() + " does not exist");
+        } else {
+            // modify existing user
+            existUser.setPassword(accountUtils.getSaltedPassword(updateUser.getEmail(), updateUser.getPassword()));
+            existUser.setEmail(updateUser.getEmail());
+            existUser.setUserName(updateUser.getUserName());
+            existUser.setFirstName(updateUser.getFirstName());
+            existUser.setLastName(updateUser.getLastName());
+            // update item in the table
+            userRepository.save(existUser);
+        }
+    }
+
     public CnsUser validateToken(String token) {
         AuthToken authToken = authTokenRepository.findByToken(token);
+
         // token does not exist
         if (authToken == null) {
             throw new CnsException(CnsErrorCode.AUTH_TOKEN_INVALID, "token is" + token, "");
         }
+
         // when token expired, remove token
         if (authToken.isExpired()) {
             authTokenRepository.delete(authToken.getId());
@@ -124,5 +142,4 @@ public class UserManager {
             }
         }
     }
-
 }

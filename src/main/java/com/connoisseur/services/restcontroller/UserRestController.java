@@ -33,12 +33,46 @@ public class UserRestController {
     @Autowired
     UserManager userManager;
 
+
+    /**
+     * POST /v1/user/  create new user
+     * No X-Auth-Token Needed
+     */
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<CnsUser> createUser(@RequestBody CnsUser user) {
+        return new ResponseEntity<>(userManager.createUser(user), HttpStatus.OK);
+    }
+
+
+    /**
+     * POST /v1/user/loginsession auth
+     * No X-Auth-Token Needed
+     */
+    @RequestMapping(value = "/loginsession", method = RequestMethod.POST)
+    public ResponseEntity<String> authSession(@RequestBody LoginInfo loginInfo) {
+        AuthToken token = userManager.auth(loginInfo.email, loginInfo.password);
+        final String resultString = gson.toJson(token);
+        return new ResponseEntity<>(resultString,HttpStatus.OK);
+    }
+
+
+    /**
+     * GET /v1/user/loginsession/{token} auth
+     */
+    @RequestMapping(value = "/loginsession", method = RequestMethod.GET)
+    public ResponseEntity<CnsUser> authSession(@RequestParam("token") String token) {
+        CnsUser user = userManager.validateToken(token);
+        user.setPassword("");
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
+
     /**
      * GET /v1/user/#id
      */
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public @ResponseBody
-    CnsUser getUser(@PathVariable("id") String userId) {
+    CnsUser getUser(@RequestParam("id") String userId) {
 
         final CnsUser user;
         user = userManager.findUserByAny(userId);
@@ -49,6 +83,27 @@ public class UserRestController {
         return user;
 
     }
+
+
+    /**
+     * PUT /v1/user/#id
+     */
+    @RequestMapping(value = "/user", method = RequestMethod.PUT)
+    public @ResponseBody
+    CnsUser putUser(@RequestParam("id") String userId , @RequestBody CnsUser updateUser) {
+
+        final CnsUser existUser;
+        existUser = userManager.findUserByAny(userId);
+
+        if (existUser == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        userManager.updateUser(existUser, updateUser);;
+
+        return existUser;
+    }
+
 
 //
 //    /**
@@ -67,37 +122,4 @@ public class UserRestController {
 //
 //
 //    }
-
-    /**
-     * POST /v1/user/  create new user
-     * No X-Auth-Token Needed
-     */
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<CnsUser> createUser(@RequestBody CnsUser user) {
-        return new ResponseEntity<>(userManager.createUser(user), HttpStatus.OK);
-    }
-
-    /**
-     * POST /v1/user/loginsession auth
-     * No X-Auth-Token Needed
-     */
-    @RequestMapping(value = "/loginsession", method = RequestMethod.POST)
-    public ResponseEntity<String> authSession(@RequestBody LoginInfo loginInfo) {
-        AuthToken token = userManager.auth(loginInfo.email, loginInfo.password);
-        final String resultString = gson.toJson(token);
-        return new ResponseEntity<>(resultString,HttpStatus.OK);
-    }
-
-
-    /**
-     * GET /v1/user/loginsession/{token} auth
-     */
-    @RequestMapping(value = "/loginsession/{token}", method = RequestMethod.GET)
-    public ResponseEntity<CnsUser> authSession(@PathVariable("token")String token) {
-        CnsUser user = userManager.validateToken(token);
-        user.setPassword("");
-        return new ResponseEntity<>(user,HttpStatus.OK);
-    }
-
-
 }
