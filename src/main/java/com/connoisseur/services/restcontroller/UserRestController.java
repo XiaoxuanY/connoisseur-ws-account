@@ -1,16 +1,26 @@
 package com.connoisseur.services.restcontroller;
 
 import com.connoisseur.services.exception.ResourceNotFoundException;
+import com.connoisseur.services.manager.BookmarkManager;
+import com.connoisseur.services.manager.CommentManager;
+import com.connoisseur.services.manager.RatingManager;
 import com.connoisseur.services.manager.UserManager;
 import com.connoisseur.services.model.AuthToken;
 import com.connoisseur.services.model.CnsUser;
+import com.connoisseur.services.model.Rating;
 import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ray Xiao on 4/18/17.
@@ -31,7 +41,16 @@ public class UserRestController {
 
 
     @Autowired
-    UserManager userManager;
+    private UserManager userManager;
+
+    @Autowired
+    private RatingManager ratingManager;
+
+    @Autowired
+    private BookmarkManager bookmarkManager;
+
+    @Autowired
+    private CommentManager commentManager;
 
 
     /**
@@ -57,9 +76,9 @@ public class UserRestController {
 
 
     /**
-     * GET /v1/user/loginsession/{token} auth
+     * GET /v1/user/validsession/{token} auth
      */
-    @RequestMapping(value = "/loginsession", method = RequestMethod.GET)
+    @RequestMapping(value = "/validsession", method = RequestMethod.GET)
     public ResponseEntity<CnsUser> authSession(@RequestParam("token") String token) {
         CnsUser user = userManager.validateToken(token);
         user.setPassword("");
@@ -72,10 +91,10 @@ public class UserRestController {
      */
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public @ResponseBody
-    CnsUser getUser(@RequestParam("id") String userId) {
+    CnsUser readUser(@RequestParam("uid") String userId) {
 
         final CnsUser user;
-        user = userManager.findUserByAny(userId);
+        user = userManager.findUserByAny(userId, true);
 
         if (user == null) {
             throw new ResourceNotFoundException();
@@ -90,10 +109,10 @@ public class UserRestController {
      */
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
     public @ResponseBody
-    CnsUser putUser(@RequestParam("id") String userId , @RequestBody CnsUser updateUser) {
+    CnsUser updateUser(@RequestParam("uid") String userId , @RequestBody CnsUser updateUser) {
 
         final CnsUser existUser;
-        existUser = userManager.findUserByAny(userId);
+        existUser = userManager.findUserByAny(userId, true);
 
         if (existUser == null) {
             throw new ResourceNotFoundException();
@@ -104,6 +123,54 @@ public class UserRestController {
         return existUser;
     }
 
+
+    @RequestMapping(value="/user", method = RequestMethod.DELETE)
+    public @ResponseBody
+    CnsUser deleteUser(@RequestParam("uid") String userId) {
+        final CnsUser existUser = userManager.findUserByAny(userId, false);
+
+        if (existUser == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        return userManager.deleteUser(existUser);
+    }
+
+    @RequestMapping(value="/rating", method = RequestMethod.GET)
+    public @ResponseBody
+    Page<Rating> readAllRating(@RequestParam("uid") String userId, Pageable pageable) {
+        return ratingManager.readPageRating(userId, pageable);
+    }
+
+    @RequestMapping(value="/rating-restaurant", method=RequestMethod.POST)
+    public @ResponseBody
+    Rating createRating(@RequestBody Rating rating) {
+        return ratingManager.createRating(rating);
+    }
+
+//    @RequestMapping(value="rating-restaurant", method=RequestMethod.PUT)
+//    public @ResponseBody
+//    Rating updateRating(@RequestBody Rating rating) {
+//        return ratingManager.updateRating(rating);
+//    }
+//
+//    @RequestMapping(value="rating-restaurant", method=RequestMethod.GET)
+//    public @ResponseBody
+//    Rating readRating(@RequestParam Map<String,String> requestParams) {
+//        String userId = requestParams.get("uid");
+//        String restId = requestParams.get("rid");
+//
+//        return ratingManager.readRating(userId, restId);
+//    }
+//
+//    @RequestMapping(value="rating-restaurant", method=RequestMethod.DELETE)
+//    public @ResponseBody
+//    Rating deleteRating(@RequestParam Map<String,String> requestParams) {
+//        String userId = requestParams.get("uid");
+//        String restId = requestParams.get("rid");
+//
+//        return ratingManager.deleteRating(userId, restId);
+//    }
 
 //
 //    /**

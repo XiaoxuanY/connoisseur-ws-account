@@ -35,10 +35,14 @@ public class AuthenticationFilter extends GenericFilterBean {
     {
         protectedUrls.add("/register");
         protectedUrls.add("/loginsession");
+        protectedUrls.add("/validsession");
         protectedUrls.add("/user");
         protectedUrls.add("/rating");
+        protectedUrls.add("/rating-restaurant");
         protectedUrls.add("/bookmark");
+        protectedUrls.add("/bookmark-restaurant");
         protectedUrls.add("/comment");
+        protectedUrls.add("/comment-restaurant");
     }
 
     @Override
@@ -49,6 +53,10 @@ public class AuthenticationFilter extends GenericFilterBean {
         String token = httpRequest.getHeader("X-Auth-Token");
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
+
+        System.out.println("URL: " + httpRequest.getRequestURL());
+        System.out.println("TOKEN: " + token);
+        System.out.println("QUERY: " + httpRequest.getQueryString());
 
         // user who did not register doesn't have token yet
         if (resourcePath.equals("/register")) {
@@ -62,34 +70,34 @@ public class AuthenticationFilter extends GenericFilterBean {
             return;
         }
 
-
         if (protectedUrls.stream().anyMatch(url -> resourcePath.startsWith(url))) {
 
             logger.debug("access " + resourcePath + " is protected, validate user session");
+            System.out.println(resourcePath);
 
             try {
                 if (token != null) {
                     CnsUser user = userManager.validateToken(token);
-
-                    if (user != null && resourcePath.startsWith("/loginsession")) {
+                    if (user != null) {
                         logger.debug("Token validated " + user.getUserName());
                         chain.doFilter(request, response);
                         return;
                     }
-                    else if (user != null) {
-                        // extract id from request parameter
-                        long paramUserId = Long.parseLong(request.getParameter("id"));
-
-                        // either token's user id and user id parameter are equal or it is admin's token
-                        if (paramUserId == user.getId() || user.getId() == 0) {
-                            logger.debug("Token validated " + user.getUserName());
-                            chain.doFilter(request, response);
-                            return;
-                        } else {
-                            logger.info("Unauthorized token!!!! " + token);
-                            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not authorized to access");
-                        }
-                    } else {
+//                    long paramUserId = Long.parseLong(request.getParameter("uid"));
+//                    if (resourcePath.startsWith("/validsession")) {
+//                        logger.debug("Token validated " + user.getUserName());
+//                        chain.doFilter(request, response);
+//                        return;
+//                    }
+//                    else if (paramUserId == user.getId() || user.getId() == 0) {
+//                        // extract id from request parameter
+//                        System.out.println(paramUserId);
+//                        // either token's user id and user id parameter are equal or it is admin's token
+//                        logger.debug("Token validated " + user.getUserName());
+//                        chain.doFilter(request, response);
+//                        return;
+//                    }
+                    else {
                         logger.info("Token invalid!!!! " + token);
                         httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalid or expired");
                     }

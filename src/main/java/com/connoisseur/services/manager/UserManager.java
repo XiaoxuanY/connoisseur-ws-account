@@ -49,18 +49,16 @@ public class UserManager {
         return user;
     }
 
-    public CnsUser findUserByAny(String identifier) {
+    public CnsUser findUserByAny(String identifier, boolean nullPw) {
         final CnsUser user = findUserByAnyInternal(identifier);
 
-        if (user != null) {
+        if (user != null && nullPw) {
             user.setPassword(null);
-
         }
         return user;
     }
 
     @Transactional(readOnly = true)
-
     public Page<CnsUser> searchUser(String query, int page, int limit) {
 
 //        Page<CnsUser> result = userRepository.findAll();
@@ -97,6 +95,16 @@ public class UserManager {
             // update item in the table
             userRepository.save(existUser);
         }
+    }
+
+    public CnsUser deleteUser(CnsUser existUser) {
+        long userId = existUser.getId();
+        AuthToken token = authTokenRepository.findByUserId(userId);
+
+        // need to delete user's information from every repository
+        authTokenRepository.delete(token);
+        userRepository.delete(userId);
+        return existUser;
     }
 
     public CnsUser validateToken(String token) {

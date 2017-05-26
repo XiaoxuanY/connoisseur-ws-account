@@ -1,6 +1,8 @@
+When you see "<...>", you need to replace it with real content
+
 *** Authentication Token NOT Needed ***
 
-1. "/register" POST (IMPL)
+1. "/register" POST (YES)
 user registration
 
 curl -X POST http://localhost:<port>/ws-account/api/register \
@@ -13,7 +15,7 @@ curl -X POST http://localhost:<port>/ws-account/api/register \
 
 
 
-2. "/user/loginsession" POST (IMPL)
+2. "/user/loginsession" POST (YES)
 Creating authentication token based on email and password **
 
 curl -X POST http://localhost:<port>/ws-account/api/loginsession \
@@ -23,27 +25,28 @@ curl -X POST http://localhost:<port>/ws-account/api/loginsession \
 
 
 *** Authentication Token Needed ***
+Either token's user id must match user id parameter
+or token belongs to admin
 
-3. "/user/loginsession?token=<token>" GET (IMPL)
+3. "/user/validsession?token=<token>" GET (YES)
 provuide user information based on token and valuidate token
 
-curl -X GET http://localhost:<port>/ws-account/api/loginsession?token=<token> \
+curl -X GET http://localhost:<port>/ws-account/api/validsession?token=<token> \
 -H "X-Auth-Token:<token>"
 
 
 
-4. "/user?uid=<uid>" GET (IMPL)
+4. "/user?uid=<uid>" GET (YES)
 user information based on user id
 - should not let user with valuid token to access other users'
   information based on user id
 
 curl -X GET http://localhost:<port>/ws-account/api/user?uid=<uid> \
--H "content-type:application/json" \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 
-5. "/user?uid=<uid>" PUT (IMPL)
+5. "/user?uid=<uid>" PUT (YES)
 update user information
 
 curl -X PUT http://localhost:<port>/ws-account/api/user?uid=<uid> \
@@ -57,33 +60,48 @@ curl -X PUT http://localhost:<port>/ws-account/api/user?uid=<uid> \
 
 
 
-6. "/user?uid=<uid>" DELETE (NOT YET)
+6. "/user?uid=<uid>" DELETE (YES)
 delete user with user id
-Token's user id must match user id parameter
 
-curl -X PUT http://localhost:<port>/ws-account/api/user?uid=<uid> \
+curl -X DELETE http://localhost:<port>/ws-account/api/user?uid=<uid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 
-7. "/rating?uid=<uid>" GET (NOT YET)
+7. "/rating?uid=<uid>&limit=<limit>&page=<page>" GET (NOT YET)
 get user's rating for all restaurants
 
+curl -X GET http://localhost:<port>/ws-account/api/rating?uid=<uid>&limit=<limit>&page=<page> \
+-H "X-Auth-Token:<X-Auth-Token>"
 
 
-8. "/rating-restaurant?uid=<uid>&rid=<rid>" POST (NOT YET)
+8. "/rating-restaurant" POST (NOT YET)
+
+curl -X POST http://localhost:8090/ws-account/api/rating-restaurant \
+-d '{"userId":"<user-id>", "restaurantId":"<restaurant-id>", "rating":"<rating>"}' \
+-H "content-type:application/json" \
+-H "X-Auth-Token:<X-Auth-Token>"
 
 
 
 9. "/rating-restaurant?uid=<uid>&rid=<rid>" GET (NOT YET)
 
+curl -X GET http://localhost:<port>/ws-account/api/rating-restaurant?uid=<uid>&rid=<rid> \
+-H "X-Auth-Token:<X-Auth-Token>"
 
 
-10. "/rating-restaurant?uid=<uid>&rid=<rid>" PUT (NOT YET)
+
+10. "/rating-restaurant?uid=<uid>&rid=<rid>&rating=<rating>" PUT (NOT YET)
+
+curl -X PUT http://localhost:<port>/ws-account/api/rating-restaurant?uid=<uid>&rid=<rid>&rating=<rating> \
+-H "X-Auth-Token:<X-Auth-Token>"
 
 
 
-11. "/rating-restaurant?uid=<uid>&rid=<rid>" DELETE (NOT YET)
+11. "/rating-restaurant?uid=<uid>&rid=<rid>&rating=<rating>" DELETE (NOT YET)
+
+curl -X DELETE http://localhost:<port>/ws-account/api/rating-restaurant?uid=<uid>&rid=<rid> \
+-H "X-Auth-Token:<X-Auth-Token>"
 
 
 
