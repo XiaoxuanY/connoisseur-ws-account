@@ -4,7 +4,9 @@ import com.connoisseur.services.manager.UserManager;
 import com.connoisseur.services.model.CnsUser;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.FilterChain;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 //
@@ -54,9 +57,13 @@ public class AuthenticationFilter extends GenericFilterBean {
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 
+        Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+
         System.out.println("URL: " + httpRequest.getRequestURL());
         System.out.println("TOKEN: " + token);
         System.out.println("QUERY: " + httpRequest.getQueryString());
+        System.out.println("UID: " + request.getParameter("uid"));
+        System.out.println("PathVariables: " + pathVariables);
 
         // user who did not register doesn't have token yet
         if (resourcePath.equals("/register")) {
@@ -73,7 +80,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         if (protectedUrls.stream().anyMatch(url -> resourcePath.startsWith(url))) {
 
             logger.debug("access " + resourcePath + " is protected, validate user session");
-            System.out.println(resourcePath);
+            System.out.println("Resource Path: " + resourcePath);
 
             try {
                 if (token != null) {
