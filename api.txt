@@ -153,3 +153,22 @@ Delete user's comment of restaurant
 curl -X DELETE http://localhost:<port>/api/comment-restaurant/uid/<uid>/rid/<rid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
+
+
+---Restaurant---
+21. "/restaurant/<restaurant-id>"
+Get individual restaurant info based on restaurant id
+curl -X GET http://localhost:<port>/api/restaurant/<restaurant-id> \
+-H "X-Auth-Token:<X-Auth-Token>"
+
+
+21. "/restaurant/city/<city>"
+Get random five restaurants based on city
+curl -X GET http://localhost:<port>/api/restaurant/city/<city> \
+-H "X-Auth-Token:<X-Auth-Token>"
+
+
+22. "/restaurant/city/<city>/label/<label>"
+Get random five restaurants based on city and label
+curl -X GET http://localhost:<port>/api/restaurant/city/<city>/label/<label> \
+-H "X-Auth-Token:<X-Auth-Token>"
