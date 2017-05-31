@@ -7,6 +7,14 @@
     <version>1.0-SNAPSHOT</version>
     <name>ws-account</name>
     <url>http://maven.apache.org</url>
+
+
+    <properties>
+        <aws-sdk-java-version>1.11.124</aws-sdk-java-version>
+        <springBootVersion>1.5.2.RELEASE</springBootVersion>
+    </properties>
+
+
     <build>
         <plugins>
             <plugin>
@@ -33,6 +41,7 @@
         </plugins>
     </build>
 
+
     <pluginRepositories>
         <pluginRepository>
             <id>central</id>
@@ -54,8 +63,9 @@
             <id>spring-milestones</id>
             <url>http://repo.spring.io/milestone</url>
         </pluginRepository>
-
     </pluginRepositories>
+
+
     <reporting>
         <outputDirectory>${project.build.directory}/site</outputDirectory>
             <plugins>
@@ -65,12 +75,9 @@
                     <version>3.0.4</version>
                 </plugin>
             </plugins>
-
     </reporting>
 
-    <properties>
-        <springBootVersion>1.5.2.RELEASE</springBootVersion>
-    </properties>
+
     <dependencies>
 
         <dependency>
@@ -97,16 +104,11 @@
             <version>${springBootVersion}</version>
         </dependency>
 
-        <!--dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-releasetrain</artifactId>
-            <version>Ingalls-RELEASE</version>
-        </dependency-->
-        <!--dependency>
+        <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-dynamodb</artifactId>
-            <version>1.11.119</version>
-        </dependency-->
+            <version>${aws-sdk-java-version}</version>
+        </dependency>
 
         <dependency>
             <groupId>io.springfox</groupId>
@@ -193,7 +195,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.4</version>
+            <version>4.5.2</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->

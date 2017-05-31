@@ -46,6 +46,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         protectedUrls.add("/bookmark-restaurant");
         protectedUrls.add("/comment");
         protectedUrls.add("/comment-restaurant");
+        protectedUrls.add("/restaurant");
     }
 
     @Override
@@ -56,14 +57,6 @@ public class AuthenticationFilter extends GenericFilterBean {
         String token = httpRequest.getHeader("X-Auth-Token");
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
-
-        Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-
-        System.out.println("URL: " + httpRequest.getRequestURL());
-        System.out.println("TOKEN: " + token);
-        System.out.println("QUERY: " + httpRequest.getQueryString());
-        System.out.println("UID: " + request.getParameter("uid"));
-        System.out.println("PathVariables: " + pathVariables);
 
         // user who did not register doesn't have token yet
         if (resourcePath.equals("/register")) {
@@ -78,17 +71,13 @@ public class AuthenticationFilter extends GenericFilterBean {
         }
 
         if (protectedUrls.stream().anyMatch(url -> resourcePath.startsWith(url))) {
-
             logger.debug("access " + resourcePath + " is protected, validate user session");
-            System.out.println("Resource Path: " + resourcePath);
-
             try {
                 if (token != null) {
                     CnsUser user = userManager.validateToken(token);
                     if (user != null) {
                         logger.debug("Token validated " + user.getUserName());
                         chain.doFilter(request, response);
-                        return;
                     }
 //                    long paramUserId = Long.parseLong(request.getParameter("uid"));
 //                    if (resourcePath.startsWith("/validsession")) {
@@ -113,12 +102,9 @@ public class AuthenticationFilter extends GenericFilterBean {
                 }
             } catch (Exception e) {
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "unknown authentication error");
-            } finally {
-                return;
             }
         } else {
             chain.doFilter(request, response);
-            return;
         }
     }
 

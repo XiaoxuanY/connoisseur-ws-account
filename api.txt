@@ -4,7 +4,7 @@ When you see "<...>", you need to replace it with real content
 
 1. "/register" POST (YES)
 User registration
-curl -X POST http://localhost:<port>/ws-account/api/register \
+curl -X POST http://localhost:<port>/api/register \
 -d '{"email":"<email>", 
 "firstName":"<first_name>",
 "lastName":"<last_name>",
@@ -15,7 +15,7 @@ curl -X POST http://localhost:<port>/ws-account/api/register \
 
 2. "/user/loginsession" POST (YES)
 Creating authentication token based on email and password **
-curl -X POST http://localhost:<port>/ws-account/api/loginsession \
+curl -X POST http://localhost:<port>/api/loginsession \
 -d '{"email":"<email>","password":"<password>"}' \
 -H "content-type:application/json"
 
@@ -30,7 +30,7 @@ or token belongs to admin
 
 3. "/user/validsession/<token>" GET (YES)
 Provide user information based on token and valuidate token
-curl -X GET http://localhost:<port>/ws-account/api/validsession/<token> \
+curl -X GET http://localhost:<port>/api/validsession/<token> \
 -H "X-Auth-Token:<token>"
 
 
@@ -38,13 +38,13 @@ curl -X GET http://localhost:<port>/ws-account/api/validsession/<token> \
 User information based on user id
 - Should not let user with valuid token to access other users'
   information based on user id
-curl -X GET http://localhost:<port>/ws-account/api/user/uid/<uid> \
+curl -X GET http://localhost:<port>/api/user/uid/<uid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 5. "/user/uid/<uid>" PUT (YES)
 Update user information
-curl -X PUT http://localhost:<port>/ws-account/api/user/uid/<uid> \
+curl -X PUT http://localhost:<port>/api/user/uid/<uid> \
 -d '{"email":"<email>", 
 "firstName":"<first_name>",
 "lastName":"<last_name>",
@@ -56,7 +56,7 @@ curl -X PUT http://localhost:<port>/ws-account/api/user/uid/<uid> \
 
 6. "/user/uid/<uid>" DELETE (YES)
 Delete user with user id
-curl -X DELETE http://localhost:<port>/ws-account/api/user/uid/<uid> \
+curl -X DELETE http://localhost:<port>/api/user/uid/<uid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
@@ -64,31 +64,31 @@ curl -X DELETE http://localhost:<port>/ws-account/api/user/uid/<uid> \
 ---RATING---
 7. "/rating/uid/<uid>/limit/<limit>/page/<page>" GET (YES)
 Get user's rating for all restaurants
-curl -X GET http://localhost:<port>/ws-account/api/rating/uid/<uid>/limit/<limit>/page/<page> \
+curl -X GET http://localhost:<port>/api/rating/uid/<uid>/limit/<limit>/page/<page> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 8. "/rating-restaurant" POST (YES)
 Create user's rating of restaurant
-curl -X POST http://localhost:<port>/ws-account/api/rating-restaurant/uid/<uid>/rid/<rid>/rating/<rating> \
+curl -X POST http://localhost:<port>/api/rating-restaurant/uid/<uid>/rid/<rid>/rating/<rating> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 9. "/rating-restaurant/uid/<uid>/rid/<rid>" PUT (YES)
 Update user's rating of restaurant
-curl -X PUT http://localhost:<port>/ws-account/api/rating-restaurant/uid/<uid>/rid/<rid>/rating/<rating> \
+curl -X PUT http://localhost:<port>/api/rating-restaurant/uid/<uid>/rid/<rid>/rating/<rating> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 10. "/rating-restaurant/uid/<uid>/rid/<rid>/rating/<rating>" GET (YES)
 Read user's rating of restaurant
-curl -X GET http://localhost:<port>/ws-account/api/rating-restaurant/uid/<uid>/rid/<rid> \
+curl -X GET http://localhost:<port>/api/rating-restaurant/uid/<uid>/rid/<rid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 11. "/rating-restaurant/uid/<uid>/rid/<rid>" DELETE (YES)
 Delete user's rating of restaurant
-curl -X DELETE http://localhost:<port>/ws-account/api/rating-restaurant/uid/<uid>/rid/<rid> \
+curl -X DELETE http://localhost:<port>/api/rating-restaurant/uid/<uid>/rid/<rid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
@@ -96,25 +96,25 @@ curl -X DELETE http://localhost:<port>/ws-account/api/rating-restaurant/uid/<uid
 ---BOOKMARK---
 12. "/bookmark/uid/<uid>" GET (YES)
 Get user's bookmark for all restaurants
-curl -X GET http://localhost:<port>/ws-account/api/bookmark/uid/<uid>/limit/<limit>/page/<page> \
+curl -X GET http://localhost:<port>/api/bookmark/uid/<uid>/limit/<limit>/page/<page> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 13. "/bookmark-restaurant/uid/<uid>/rid/<rid>" POST (YES)
 Create user's bookmark of restaurant
-curl -X POST http://localhost:<port>/ws-account/api/bookmark-restaurant/uid/<uid>/rid/<rid> \
+curl -X POST http://localhost:<port>/api/bookmark-restaurant/uid/<uid>/rid/<rid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 14. "/bookmark-restaurant/uid/<uid>/rid/<rid>" GET (YES)
 Read user's bookmark of restaurant (Check if it is bookmarked)
-curl -X GET http://localhost:<port>/ws-account/api/bookmark-restaurant/uid/<uid>/rid/<rid> \
+curl -X GET http://localhost:<port>/api/bookmark-restaurant/uid/<uid>/rid/<rid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 15. "/bookmark-restaurant/uid/<uid>/rid/<rid>" DELETE (YES)
 Delete user's bookmark of restaurant
-curl -X DELETE http://localhost:<port>/ws-account/api/bookmark-restaurant/uid/<uid>/rid/<rid> \
+curl -X DELETE http://localhost:<port>/api/bookmark-restaurant/uid/<uid>/rid/<rid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
@@ -122,13 +122,13 @@ curl -X DELETE http://localhost:<port>/ws-account/api/bookmark-restaurant/uid/<u
 ---COMMENT---
 16. "/comment/uid/<uid>" GET (YES)
 Get user's comment for all restaurants
-curl -X GET http://localhost:<port>/ws-account/api/comment/uid/<uid>/limit/<limit>/page/<page> \
+curl -X GET http://localhost:<port>/api/comment/uid/<uid>/limit/<limit>/page/<page> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 17. "/comment-restaurant/uid/<uid>/rid/<rid>" POST (YES)
 Create user's comment of restaurant
-curl -X POST http://localhost:<port>/ws-account/api/comment-restaurant/uid/<uid>/rid/<rid> \
+curl -X POST http://localhost:<port>/api/comment-restaurant/uid/<uid>/rid/<rid> \
 -d '<comment>' \
 -H "content-type:application/json" \
 -H "X-Auth-Token:<X-Auth-Token>"
@@ -136,7 +136,7 @@ curl -X POST http://localhost:<port>/ws-account/api/comment-restaurant/uid/<uid>
 
 18. "/comment-restaurant/uid/<uid>/rid/<rid>" PUT (YES)
 Update user's comment of restaurant
-curl -X PUT http://localhost:<port>/ws-account/api/comment-restaurant/uid/<uid>/rid/<rid> \
+curl -X PUT http://localhost:<port>/api/comment-restaurant/uid/<uid>/rid/<rid> \
 -d '<comment>' \
 -H "content-type:application/json" \
 -H "X-Auth-Token:<X-Auth-Token>"
@@ -144,12 +144,12 @@ curl -X PUT http://localhost:<port>/ws-account/api/comment-restaurant/uid/<uid>/
 
 19. "/comment-restaurant/uid/<uid>/rid/<rid>" GET (YES)
 Read user's comment of restaurant
-curl -X GET http://localhost:<port>/ws-account/api/comment-restaurant/uid/<uid>/rid/<rid> \
+curl -X GET http://localhost:<port>/api/comment-restaurant/uid/<uid>/rid/<rid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
 
 20. "/comment-restaurant/uid/<uid>/rid/<rid>" DELETE (YES)
 Delete user's comment of restaurant
-curl -X DELETE http://localhost:<port>/ws-account/api/comment-restaurant/uid/<uid>/rid/<rid> \
+curl -X DELETE http://localhost:<port>/api/comment-restaurant/uid/<uid>/rid/<rid> \
 -H "X-Auth-Token:<X-Auth-Token>"
 
