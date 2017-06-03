@@ -12,7 +12,6 @@ import javax.servlet.Filter;
  * Created by rayxiao on 5/2/17.
  */
 @Configuration
-
 public class WebConfiguration extends RepositoryRestMvcConfiguration {
 
 
