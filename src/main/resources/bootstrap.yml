@@ -1,0 +1,4 @@
+spring:
+  profiles: sentence
+  application:
+    name: lab-4-sentence
