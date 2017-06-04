@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,6 +50,16 @@ public class UserRestController {
     @Autowired
     private CommentManager commentManager;
 
+    String words = "Yu, Lawrence, Leon, David, Ben, Mike";
+
+    @RequestMapping("/")
+    public @ResponseBody String getWord(){
+        String[] wordArray = words.split(",");
+        int i = (int)Math.round(Math.random() * (wordArray.length - 1));
+        System.out.println("Request received");
+        return wordArray[i];
+    }
+
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<CnsUser> createUser(@RequestBody CnsUser user) {
@@ -65,7 +76,7 @@ public class UserRestController {
     @RequestMapping(value = "/validsession", method = RequestMethod.GET)
     public ResponseEntity<CnsUser> authSession(@RequestParam("token") String token) {
         CnsUser user = userManager.validateToken(token);
-        user.setPassword("");
+      //  user.setPassword("");
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 

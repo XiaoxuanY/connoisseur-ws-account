@@ -8,10 +8,9 @@ import org.springframework.context.annotation.Import;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 
+//@Import({springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class})
 @SpringBootApplication
-@EnableAutoConfiguration
 @EnableDiscoveryClient
-@Import({springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class})
 public class AccountApplication  {
 
 	public static void main(String[] args) {
