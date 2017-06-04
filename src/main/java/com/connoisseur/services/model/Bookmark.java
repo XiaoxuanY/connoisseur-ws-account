@@ -28,7 +28,7 @@ public class Bookmark {
 
     Bookmark() {} // jpa only?
 
-    Bookmark(long userId, String restaurantId) {
+    public Bookmark(long userId, String restaurantId) {
         this.userId = userId;
         this.restaurantId = restaurantId;
     }

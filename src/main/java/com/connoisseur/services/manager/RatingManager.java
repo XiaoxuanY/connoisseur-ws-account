@@ -36,20 +36,20 @@ public class RatingManager {
         return new PageImpl<>(ratingList, pageable, ratingList.size());
     }
 
-    public Rating createRating(Rating rating) {
-        return ratingRepository.save(rating);
+    public Rating createRating(String userId, String restaurantId, String rating) {
+        return ratingRepository.save(new Rating(Long.parseLong(userId), restaurantId, Integer.valueOf(rating)));
     }
 
-    public Rating updateRating(Rating rating) {
-        return ratingRepository.save(rating);
+    public Rating updateRating(String userId, String restaurantId, String rating) {
+        return ratingRepository.save(new Rating(Long.parseLong(userId), restaurantId, Integer.valueOf(rating)));
     }
 
-    public Rating readRating(String userId, String restId) {
-        return ratingRepository.findByUserIdAndRestaurantId(Long.parseLong(userId), restId);
+    public Rating readRating(String userId, String restaurantId) {
+        return ratingRepository.findByUserIdAndRestaurantId(Long.parseLong(userId), restaurantId);
     }
 
-    public Rating deleteRating(String userId, String restId) {
-        Rating rating = ratingRepository.findByUserIdAndRestaurantId(Long.parseLong(userId), restId);
+    public Rating deleteRating(String userId, String restaurantId) {
+        Rating rating = ratingRepository.findByUserIdAndRestaurantId(Long.parseLong(userId), restaurantId);
         ratingRepository.delete(rating);
         return rating;
     }

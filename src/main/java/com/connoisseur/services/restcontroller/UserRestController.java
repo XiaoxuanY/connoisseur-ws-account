@@ -5,21 +5,18 @@ import com.connoisseur.services.manager.BookmarkManager;
 import com.connoisseur.services.manager.CommentManager;
 import com.connoisseur.services.manager.RatingManager;
 import com.connoisseur.services.manager.UserManager;
-import com.connoisseur.services.model.AuthToken;
-import com.connoisseur.services.model.CnsUser;
-import com.connoisseur.services.model.Rating;
+import com.connoisseur.services.model.*;
 import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,20 +50,11 @@ public class UserRestController {
     private CommentManager commentManager;
 
 
-    /**
-     * POST /v1/user/  create new user
-     * No X-Auth-Token Needed
-     */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<CnsUser> createUser(@RequestBody CnsUser user) {
         return new ResponseEntity<>(userManager.createUser(user), HttpStatus.OK);
     }
 
-
-    /**
-     * POST /v1/user/loginsession auth
-     * No X-Auth-Token Needed
-     */
     @RequestMapping(value = "/loginsession", method = RequestMethod.POST)
     public ResponseEntity<String> authSession(@RequestBody LoginInfo loginInfo) {
         AuthToken token = userManager.auth(loginInfo.email, loginInfo.password);
@@ -74,10 +62,6 @@ public class UserRestController {
         return new ResponseEntity<>(resultString,HttpStatus.OK);
     }
 
-
-    /**
-     * GET /v1/user/validsession/{token} auth
-     */
     @RequestMapping(value = "/validsession", method = RequestMethod.GET)
     public ResponseEntity<CnsUser> authSession(@RequestParam("token") String token) {
         CnsUser user = userManager.validateToken(token);
@@ -85,10 +69,6 @@ public class UserRestController {
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
-
-    /**
-     * GET /v1/user/#id
-     */
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public @ResponseBody
     CnsUser readUser(@RequestParam("uid") String userId) {
@@ -103,10 +83,6 @@ public class UserRestController {
 
     }
 
-
-    /**
-     * PUT /v1/user/#id
-     */
     @RequestMapping(value = "/user", method = RequestMethod.PUT)
     public @ResponseBody
     CnsUser updateUser(@RequestParam("uid") String userId , @RequestBody CnsUser updateUser) {
@@ -136,57 +112,90 @@ public class UserRestController {
         return userManager.deleteUser(existUser);
     }
 
-    @RequestMapping(value="/rating", method = RequestMethod.GET)
+    @RequestMapping(value="/rating/uid/{userId}/limit/{limit}/page/{page}", method = RequestMethod.GET)
     public @ResponseBody
-    Page<Rating> readAllRating(@RequestParam("uid") String userId, Pageable pageable) {
-        return ratingManager.readPageRating(userId, pageable);
+    Page<Rating> readAllRating(@PathVariable String userId, @PathVariable int limit, @PathVariable int page) {
+        PageRequest pageRequest = new PageRequest(page, limit);
+        return ratingManager.readPageRating(userId, pageRequest);
     }
 
-    @RequestMapping(value="/rating-restaurant", method=RequestMethod.POST)
+    @RequestMapping(value="rating-restaurant/uid/{userId}/rid/{restaurantId}/rating/{rating}", method=RequestMethod.POST)
     public @ResponseBody
-    Rating createRating(@RequestBody Rating rating) {
-        return ratingManager.createRating(rating);
+    Rating createRating(@PathVariable String userId, @PathVariable String restaurantId, @PathVariable String rating) {
+        return ratingManager.createRating(userId, restaurantId, rating);
     }
 
-//    @RequestMapping(value="rating-restaurant", method=RequestMethod.PUT)
-//    public @ResponseBody
-//    Rating updateRating(@RequestBody Rating rating) {
-//        return ratingManager.updateRating(rating);
-//    }
-//
-//    @RequestMapping(value="rating-restaurant", method=RequestMethod.GET)
-//    public @ResponseBody
-//    Rating readRating(@RequestParam Map<String,String> requestParams) {
-//        String userId = requestParams.get("uid");
-//        String restId = requestParams.get("rid");
-//
-//        return ratingManager.readRating(userId, restId);
-//    }
-//
-//    @RequestMapping(value="rating-restaurant", method=RequestMethod.DELETE)
-//    public @ResponseBody
-//    Rating deleteRating(@RequestParam Map<String,String> requestParams) {
-//        String userId = requestParams.get("uid");
-//        String restId = requestParams.get("rid");
-//
-//        return ratingManager.deleteRating(userId, restId);
-//    }
+    @RequestMapping(value="rating-restaurant/uid/{userId}/rid/{restaurantId}/rating/{rating}", method=RequestMethod.PUT)
+    public @ResponseBody
+    Rating updateRating(@PathVariable String userId, @PathVariable String restaurantId, @PathVariable String rating) {
+        return ratingManager.updateRating(userId, restaurantId, rating);
+    }
 
-//
-//    /**
-//     * GET /v1/user/   get user list
-//     *
-//     * @return
-//     */
-//    @RequestMapping(value = "/user/",params={"limit","page","query"},method = RequestMethod.GET)
-//    public @ResponseBody
-//    List<CnsUser> getUser(@RequestParam("limit") int limit, @RequestParam("page") int page, @RequestParam("query") String query) {
-//
-//
-//        final Page<CnsUser> result = userManager.searchUser(query,page,limit);
-//
-//        return result.getContent();
-//
-//
-//    }
+    @RequestMapping(value="rating-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
+    public @ResponseBody
+    Rating readRating(@PathVariable String userId, @PathVariable String restaurantId) {
+        return ratingManager.readRating(userId, restaurantId);
+    }
+
+    @RequestMapping(value="rating-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
+    public @ResponseBody
+    Rating deleteRating(@PathVariable String userId, @PathVariable String restaurantId) {
+        return ratingManager.deleteRating(userId, restaurantId);
+    }
+
+    @RequestMapping(value="/bookmark/uid/{userId}/limit/{limit}/page/{page}", method = RequestMethod.GET)
+    public @ResponseBody
+    Page<Bookmark> readAllBookmark(@PathVariable String userId, @PathVariable int limit, @PathVariable int page) {
+        PageRequest pageRequest = new PageRequest(page, limit);
+        return bookmarkManager.readPageBookmark(userId, pageRequest);
+    }
+
+    @RequestMapping(value="bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.POST)
+    public @ResponseBody
+    Bookmark createBookmark(@PathVariable String userId, @PathVariable String restaurantId) {
+        return bookmarkManager.createBookmark(userId, restaurantId);
+    }
+
+    @RequestMapping(value="bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
+    public @ResponseBody
+    Bookmark readBookmark(@PathVariable String userId, @PathVariable String restaurantId) {
+        return bookmarkManager.readBookmark(userId, restaurantId);
+    }
+
+    @RequestMapping(value="bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
+    public @ResponseBody
+    Bookmark deleteBookmark(@PathVariable String userId, @PathVariable String restaurantId) {
+        return bookmarkManager.deleteBookmark(userId, restaurantId);
+    }
+
+    @RequestMapping(value="/comment/uid/{userId}/limit/{limit}/page/{page}", method = RequestMethod.GET)
+    public @ResponseBody
+    Page<Comment> readAllComment(@PathVariable String userId, @PathVariable int limit, @PathVariable int page) {
+        PageRequest pageRequest = new PageRequest(page, limit);
+        return commentManager.readPageComment(userId, pageRequest);
+    }
+
+    @RequestMapping(value="comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.POST)
+    public @ResponseBody
+    Comment createComment(@PathVariable String userId, @PathVariable String restaurantId, @RequestBody String comment) {
+        return commentManager.createComment(userId, restaurantId, comment);
+    }
+
+    @RequestMapping(value="comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.PUT)
+    public @ResponseBody
+    Comment updateComment(@PathVariable String userId, @PathVariable String restaurantId, @RequestBody String comment) {
+        return commentManager.updateComment(userId, restaurantId, comment);
+    }
+
+    @RequestMapping(value="comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
+    public @ResponseBody
+    Comment readComment(@PathVariable String userId, @PathVariable String restaurantId) {
+        return commentManager.readComment(userId, restaurantId);
+    }
+
+    @RequestMapping(value="comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
+    public @ResponseBody
+    Comment deleteComment(@PathVariable String userId, @PathVariable String restaurantId) {
+        return commentManager.deleteComment(userId, restaurantId);
+    }
 }
