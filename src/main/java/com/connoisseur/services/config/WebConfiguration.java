@@ -1,6 +1,7 @@
 package com.connoisseur.services.config;
 
 //import com.connoisseur.services.filter.AuthenticationFilter;
+import com.connoisseur.services.filter.AuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -23,8 +24,8 @@ public class WebConfiguration extends RepositoryRestMvcConfiguration {
     }
 
 
-//    @Bean
-//    public Filter authenticationFilter() {
-//        return new AuthenticationFilter();
-//    }
+    @Bean
+    public Filter authenticationFilter() {
+        return new AuthenticationFilter();
+    }
 }

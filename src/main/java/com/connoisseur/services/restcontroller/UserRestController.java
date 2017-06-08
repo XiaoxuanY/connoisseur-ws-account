@@ -110,7 +110,6 @@ public class UserRestController {
         return existUser;
     }
 
-
     @RequestMapping(value="/user", method = RequestMethod.DELETE)
     public @ResponseBody
     CnsUser deleteUser(@RequestParam("uid") String userId) {
@@ -130,25 +129,25 @@ public class UserRestController {
         return ratingManager.readPageRating(userId, pageRequest);
     }
 
-    @RequestMapping(value="rating-restaurant/uid/{userId}/rid/{restaurantId}/rating/{rating}", method=RequestMethod.POST)
+    @RequestMapping(value="/rating-restaurant/uid/{userId}/rid/{restaurantId}/rating/{rating}", method=RequestMethod.POST)
     public @ResponseBody
     Rating createRating(@PathVariable String userId, @PathVariable String restaurantId, @PathVariable String rating) {
         return ratingManager.createRating(userId, restaurantId, rating);
     }
 
-    @RequestMapping(value="rating-restaurant/uid/{userId}/rid/{restaurantId}/rating/{rating}", method=RequestMethod.PUT)
+    @RequestMapping(value="/rating-restaurant/uid/{userId}/rid/{restaurantId}/rating/{rating}", method=RequestMethod.PUT)
     public @ResponseBody
     Rating updateRating(@PathVariable String userId, @PathVariable String restaurantId, @PathVariable String rating) {
         return ratingManager.updateRating(userId, restaurantId, rating);
     }
 
-    @RequestMapping(value="rating-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
+    @RequestMapping(value="/rating-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
     public @ResponseBody
     Rating readRating(@PathVariable String userId, @PathVariable String restaurantId) {
         return ratingManager.readRating(userId, restaurantId);
     }
 
-    @RequestMapping(value="rating-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/rating-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
     public @ResponseBody
     Rating deleteRating(@PathVariable String userId, @PathVariable String restaurantId) {
         return ratingManager.deleteRating(userId, restaurantId);
@@ -161,19 +160,19 @@ public class UserRestController {
         return bookmarkManager.readPageBookmark(userId, pageRequest);
     }
 
-    @RequestMapping(value="bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.POST)
+    @RequestMapping(value="/bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.POST)
     public @ResponseBody
     Bookmark createBookmark(@PathVariable String userId, @PathVariable String restaurantId) {
         return bookmarkManager.createBookmark(userId, restaurantId);
     }
 
-    @RequestMapping(value="bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
+    @RequestMapping(value="/bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
     public @ResponseBody
     Bookmark readBookmark(@PathVariable String userId, @PathVariable String restaurantId) {
         return bookmarkManager.readBookmark(userId, restaurantId);
     }
 
-    @RequestMapping(value="bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/bookmark-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
     public @ResponseBody
     Bookmark deleteBookmark(@PathVariable String userId, @PathVariable String restaurantId) {
         return bookmarkManager.deleteBookmark(userId, restaurantId);
@@ -186,25 +185,25 @@ public class UserRestController {
         return commentManager.readPageComment(userId, pageRequest);
     }
 
-    @RequestMapping(value="comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.POST)
+    @RequestMapping(value="/comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.POST)
     public @ResponseBody
     Comment createComment(@PathVariable String userId, @PathVariable String restaurantId, @RequestBody String comment) {
         return commentManager.createComment(userId, restaurantId, comment);
     }
 
-    @RequestMapping(value="comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.PUT)
+    @RequestMapping(value="/comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.PUT)
     public @ResponseBody
     Comment updateComment(@PathVariable String userId, @PathVariable String restaurantId, @RequestBody String comment) {
         return commentManager.updateComment(userId, restaurantId, comment);
     }
 
-    @RequestMapping(value="comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
+    @RequestMapping(value="/comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.GET)
     public @ResponseBody
     Comment readComment(@PathVariable String userId, @PathVariable String restaurantId) {
         return commentManager.readComment(userId, restaurantId);
     }
 
-    @RequestMapping(value="comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
+    @RequestMapping(value="/comment-restaurant/uid/{userId}/rid/{restaurantId}", method=RequestMethod.DELETE)
     public @ResponseBody
     Comment deleteComment(@PathVariable String userId, @PathVariable String restaurantId) {
         return commentManager.deleteComment(userId, restaurantId);
